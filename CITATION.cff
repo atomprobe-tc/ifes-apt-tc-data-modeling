@@ -1,10 +1,10 @@
 cff-version: 1.2.0
 title: 'ifes_apt_tc_data_modeling: A Python Library for reading file formats and working with atom probe data'
-version: 0.4.1
 message:
   If you use this software, please cite it using the
   metadata from this file.
 type: software
+version: 0.4.2
 authors:
   - given-names: Markus
     family-names: Kühbach
@@ -25,8 +25,3 @@ abstract:
   (https://gepris.dfg.de/gepris/projekt/460197019?language=en).
 
 license: Apache-2.0
-funding:
-  - name: Deutsche Forschungsgemeinschaft
-    award-number: 460197019
-    title: FAIRmat - FAIR Data Infrastructure for Condensed-Matter Physics and the Chemical Physics of Solids
-    award-uri: https://gepris.dfg.de/gepris/projekt/460197019?language=en

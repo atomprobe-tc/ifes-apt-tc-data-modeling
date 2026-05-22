@@ -1,12 +1,12 @@
 [build-system]
-requires = ["setuptools>=78.1.1", "setuptools-scm[toml]>=6.2"]
+requires = ["setuptools>=78.1.1", "setuptools-scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ifes_apt_tc_data_modeling"
 dynamic = ["version"]
 authors = [
-    { name = "The NOMAD Authors" },
+    { name = "The NOMAD Authors", email = "fairmat@physik.hu-berlin.de" },
 ]
 description = "Working with file formats and data models in atom probe tomography and related field-ion microscopy (atom probe microscopy)."
 readme = "README.md"
@@ -17,6 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
@@ -35,12 +36,12 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "mypy",
-    "ruff>=0.15.0",
+    "ruff>=0.15",
     "types-xmltodict",
     "types-pyyaml",
     "pandas-stubs",
     "pytest",
-    "pre-commit"
+    "pre-commit",
 ]
 docs = [
     "mkdocs",
