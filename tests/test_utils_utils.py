@@ -18,7 +18,9 @@
 
 import numpy as np
 import pytest
+from packaging.version import InvalidVersion, Version
 
+from ifes_apt_tc_data_modeling import get_ifes_apt_tc_data_modeling_version
 from ifes_apt_tc_data_modeling.utils.definitions import NEUTRON_NUMBER_FOR_ELEMENT
 from ifes_apt_tc_data_modeling.utils.utils import (
     MQ_EPSILON,
@@ -241,6 +243,15 @@ def test_element_or_nuclide_to_hash(symbol: str, expected: int):
         assert expected == element_or_nuclide_to_hash(symbol)
     except (ValueError, TypeError) as exc:
         assert True, f"element_or_nuclide_to_hash raised an exception {exc}"
+
+
+def test_get_ifes_apt_tc_data_modeling_version():
+    version = get_ifes_apt_tc_data_modeling_version()
+    assert version != "unknown_version"
+    try:
+        Version(version)
+    except InvalidVersion:
+        assert False, f"Invalid version: {version}"
 
 
 """
