@@ -54,7 +54,7 @@ docs = [
 ipynb = [
     "jupyter",
     "jupyterlab",
-    "jupyterlab_h5web"
+    "jupyterlab_h5web>=12.7.0"
 ]
 
 [project.urls]
