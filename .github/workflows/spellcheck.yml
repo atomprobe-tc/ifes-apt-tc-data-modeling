@@ -9,24 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install dependencies and dictionary
-      run: |
-        npm install -g cspell jq @cspell/dict-scientific-terms-us
+      - name: Install cspell
+        run: npm install -g cspell @cspell/dict-scientific-terms-us
 
-    - name: Run cspell
-      run: |
-        cspell --config cspell.json \
-        "README.md" "CITATION.cff" \
-        "docs/**/*" \
-        "src/ifes_apt_tc_data_modeling/**/*.py" \
-        "tests/**/*.py"
+      - name: Run cspell
+        run: |
+          cspell --config cspell.json \
+            "README.md" "CITATION.cff" \
+            "docs/**/*" \
+            "src/ifes_apt_tc_data_modeling/**/*.py" \
+            "tests/**/*.py"
 
-    - name: Fail on errors
-      run: |
-        if [[ $? -ne 0 ]]; then
-          echo "There are spelling errors in your code. Please fix them and try again."
-          exit 1
-        fi
+      - name: Report success
+        if: success()
+        run: echo "No spelling errors found."
