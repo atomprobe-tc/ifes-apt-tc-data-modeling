@@ -196,11 +196,10 @@ class ReadAptFileFormat:
 
             type_literal = self.available_sections[keyword].get_ametek_type()
             offset = int(byte_position_start)
-            stride = int(self.available_sections[keyword].meta["i_data_type_size"] / 8)
-            item_size = np.dtype(type_literal).itemsize
-            ##########################
-            assert stride == item_size
-            ##########################
+            item_size = int(
+                self.available_sections[keyword].meta["i_data_type_size"] / 8
+            )
+            # item_size = np.dtype(type_literal).itemsize
             count = self.available_sections[keyword].get_ametek_count()
             shape = tuple(
                 [
@@ -238,7 +237,11 @@ class ReadAptFileFormat:
                 else:
                     values = np.zeros(shape, dtype=type_literal)
                     all_values = True
+<<<<<<< HEAD
                     for column_index in np.arange(0, number_of_fast_columns):
+=======
+                    for column_index in range(0, number_of_fast_columns):
+>>>>>>> main
                         data = get_memory_mapped_data(
                             self.file_path,
                             type_literal,

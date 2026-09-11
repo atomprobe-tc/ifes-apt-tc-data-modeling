@@ -7,7 +7,7 @@ hide: toc
 A Python software module for reading file formats that are used in the research field of atom probe tomography and field ion microscopy.
 
 <div markdown="block" class="home-grid">
-<div markdown="block"> 
+<div markdown="block">
 
 ### Tutorial
 
@@ -32,10 +32,10 @@ Installation guides exist for users and developers.
 
 Background knowledge to specific topics.
 
-- [Exchange](explanation/learn.md)
-- [Provenance](explanation/provenance.md)
-- [Specifications](explanation/suggestions.md)
-- [NeXus NXapm](explanation/nxapm.md)
+- [Exchange](learn/learn.md)
+- [Provenance](learn/provenance.md)
+- [Specifications](learn/suggestions.md)
+- [NeXus NXapm](learn/nxapm.md)
 
 </div>
 <div markdown="block">
@@ -55,6 +55,6 @@ For questions or suggestions:
 
 [The work is supported by the International Field Emission Society (IFES) Atom Probe Tomography Technical Committee (APT TC).](https://fieldemission.org/article.php?id=technical_committee)
 
-[The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat).](https://gepris.dfg.de/gepris/projekt/460197019?language=en)
+The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - [460197019 (FAIRmat).](https://gepris.dfg.de/gepris/projekt/460197019?language=en)
 
-[The library is used for the pynxtools-apm to standardized atom probe data using NeXus.](https://www.github.com/FAIRmat-NFDI/pynxtools-apm.git)
+The library is used by `pynxtools-apm` [to standardized atom probe data using NeXus](https://www.github.com/FAIRmat-NFDI/pynxtools-apm.git).

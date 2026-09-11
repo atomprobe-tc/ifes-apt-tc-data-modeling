@@ -1,14 +1,14 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.13
+    rev: v0.15.19
     hooks:
       - id: ruff-check  # linting
-        files: ^(src/ifes_apt_tc_data_modeling|tests)/.*\.py$
+        files: ^(src/ifes_apt_tc_data_modeling|tests|examples)/.*\.{py|ipynb}$
       - id: ruff-format
-        files: ^(src/ifes_apt_tc_data_modeling|tests)/.*\.py$
+        files: ^(src/ifes_apt_tc_data_modeling|tests|examples)/.*\.{py|ipynb}$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v1.20.2
     hooks:
       - id: mypy  # static type checking
 
@@ -16,15 +16,15 @@ repos:
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: [--py36-plus]  # modernizes syntax for Python 3.6+
+        args: [--py310-plus]  # modernizes syntax for Python 3.10+
 
-  # - repo: https://github.com/kynan/nbstripout
-  #   rev: 0.9.0
-  #   hooks:
-  #     - id: nbstripout  # removes notebook outputs before committing
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.9.1
+    hooks:
+      - id: nbstripout  # removes notebook outputs before committing
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v9.4.0
+    rev: v10.0.1
     hooks:
       - id: cspell  # spellchecking
         pass_filenames: false

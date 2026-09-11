@@ -3,6 +3,7 @@ name: Upload Python Package
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 env:
   python-version: 3.12
@@ -23,16 +24,6 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ env.python-version }}
-      - name: Git tag version
-        id: git_tag_version
-        run: |
-          GIT_TAG_VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$GIT_TAG_VERSION" >> "$GITHUB_OUTPUT"
-      - name: Citation version
-        id: citation_version
-        run: |
-          CITATION_VERSION=$(grep '^version:' CITATION.cff | cut -d' ' -f2)
-          echo "version=$CITATION_VERSION" >> "$GITHUB_OUTPUT"
 
   test:
     name: Run Tests
@@ -53,9 +44,21 @@ jobs:
       - name: Test with pytest
         run: pytest tests/
 
+  compare-versions:
+    name: Compare Versions
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if versions mismatch
+        run: |
+          if [ "${{ needs.setup.outputs.git_tag_version }}" != "${{ needs.setup.outputs.citation_version }}" ]; then
+            echo "Version mismatch: Git tag is ${{ needs.setup.outputs.git_tag_version }}, CITATION.cff is ${{ needs.setup.outputs.citation_version }}"
+            exit 1
+          fi
+
   build:
     name: Build Package
-    needs: [test]
+    needs: [compare-versions, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,16 +70,35 @@ jobs:
         with:
           python-version: ${{ env.python-version }}
       - name: Build package
-        run: uv build
+        run: |
+          uv build
       - name: Upload dist artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist-artifacts
           path: dist/
 
+  test-install:
+    name: Install built package
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install uv and set the python version to ${{ env.python-version }}
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ env.python-version }}
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifacts
+          path: dist/
+      - name: Install sdist
+        run: |
+          uv pip install dist/*.tar.gz
+
   deploy:
     name: Upload to PyPI
-    needs: build
+    needs: [build, test-install]
     runs-on: ubuntu-latest
     environment:
       name: pypi
