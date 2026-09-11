@@ -23,9 +23,9 @@ from ifes_apt_tc_data_modeling.utils.pint_custom_unit_registry import ureg
 
 def simple_hfive_file(fpw, idx, mion):
     """Write specific content in existent and opened HDF5 file pointed to by fpw with write access."""
-    trg = f"/entry1/ion{idx}"
+    trg = f"/ion{idx}"
     grp = fpw.create_group(trg)
-    grp.attrs["NX_class"] = "NXion"
+    grp.attrs["NX_class"] = "NXatom"
     dst = fpw.create_dataset(f"{trg}/comment", data=mion.comment)
     # dst = fpw.create_dataset(f"{trg}/color", data=mion.color)
     # dst = fpw.create_dataset(f"{trg}/volume", dtype=np.float32, data=0.)

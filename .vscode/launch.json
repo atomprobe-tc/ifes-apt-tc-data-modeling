@@ -9,8 +9,11 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            //"program": "../.py3.13.8/bin/dataconverter",
-            "args": ["tests/data/cameca_hdf/R69_152985-v01_Top_Level_ROI.hdf5"],
+            //"program": "../.py3.12.3/bin/dataconverter",
+            "args": [
+                "tests/data/analysisset/ZX21-T4.analysisset",
+                //"tests/data/cameca_hdf/R69_152985-v01_Top_Level_ROI.hdf5"
+            ],
             "justMyCode": false,
         },
         {

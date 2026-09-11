@@ -176,18 +176,21 @@ dist
 # *.FIG.TXT
 # *.fig.txt
 # *.fig.TXT
-# *.pos
-# *.POS
-# *.epos
-# *.EPOS
-# *.ePOS
-# *.apt
-# *.APT
-# *.h5
-# *.H5
-# *.hdf5
-# *.HDF5
-# *.nxs
-# *.NXS
+*.pos
+*.POS
+*.epos
+*.EPOS
+*.ePOS
+*.apt
+*.APT
+*.h5
+*.H5
+*.hdf5
+*.HDF5
+*.raw
+*.nxs
+*.NXS
+tests/**/*.nxs
 tests/data/cameca_hfive/
 tests/data/rrng/examples_without_provenance/aut_leoben_reichmann/
+

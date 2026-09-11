@@ -13,6 +13,7 @@ Hfive
 IFES
 IONTYPE
 IVAS
+Kruska's
 Kühbach
 LAWATAP
 Markus
@@ -34,6 +35,7 @@ cand
 combinatorially
 complexs
 copyto
+duesseldorf
 erate
 flatdict
 flatfile
@@ -51,6 +53,7 @@ itemsize
 ivector
 ixxth
 kaitai
+kuehbach
 laserpower
 laserx
 lasery
@@ -67,6 +70,7 @@ mult
 nochop
 nparray
 nuclides
+oned
 orcid
 paraprobe
 pyccapt
@@ -82,8 +86,10 @@ runrootl
 sextett
 tofb
 tofc
+tofile
 tribool
 tstage
+twod
 unranged
 ureg
 xstage

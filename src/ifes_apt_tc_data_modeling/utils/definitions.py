@@ -26,7 +26,7 @@ import numpy as np
 # before the default value was 0
 NEUTRON_NUMBER_FOR_ELEMENT = 255
 # restrict the number distinguished ion types
-MAX_NUMBER_OF_ION_SPECIES = 256
+MAX_NUMBER_OF_ION_SPECIES = 65536
 # restrict number of atoms for molecular ion fragments
 MAX_NUMBER_OF_ATOMS_PER_ION = 32
 # practical and required minimum mass-resolution Da or atomic mass unit (amu)
