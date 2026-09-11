@@ -180,7 +180,8 @@ class MolecularIonBuilder:
                         if np.isinf(half_life):
                             observationally_stable = True
 
-                    # not continued, so consider, use ase abundance data, with rd half lifes
+                    # not continued, so consider, use ase abundance data, with rd
+                    # half life values sufficient
                     n_protons = atomic_number
                     n_neutrons = mass_number - n_protons
                     mass = isotopes[n_protons][mass_number]["mass"]
