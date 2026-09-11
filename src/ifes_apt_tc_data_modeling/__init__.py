@@ -20,10 +20,10 @@ import importlib.metadata
 
 
 def get_ifes_apt_tc_data_modeling_version() -> str:
-    """Attempt getting the version of ifes_apt_tc_data_modeling at runtime with fallback."""
+    """Attempt getting the version of ifes-apt-tc-data-modeling at runtime with fallback."""
     # for a discussion whether to collect at build or runtime see
     # https://discuss.python.org/t/please-make-package-version-go-away/58501
     try:
-        return f"{importlib.metadata.version('ifes_apt_tc_data_modeling')}"
+        return f"{importlib.metadata.version('ifes-apt-tc-data-modeling')}"
     except importlib.metadata.PackageNotFoundError:
         return f"unknown_version"

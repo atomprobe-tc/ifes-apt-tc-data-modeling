@@ -4,8 +4,8 @@ Developers should clone the repository and install using e.g., uv, a Python virt
 or a conda environment. Exemplified for a Python venv this reads
 
 ```bash
-git clone https://www.github.com/atomprobe-tc/ifes_apt_tc_data_modeling.git
-cd ifes_apt_tc_data_modeling
+git clone https://www.github.com/atomprobe-tc/ifes-apt-tc-data-modeling.git
+cd ifes-apt-tc-data-modeling
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev,docs,ipynb]"
 ```

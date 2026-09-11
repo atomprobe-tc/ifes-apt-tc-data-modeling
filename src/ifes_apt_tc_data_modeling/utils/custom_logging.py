@@ -23,7 +23,7 @@ import logging
 try:
     from pynxtools_apm.utils.custom_logging import logger
 except ImportError as exc:
-    DEFAULT_LOGGER_NAME = "ifes_apt_tc_data_modeling"
+    DEFAULT_LOGGER_NAME = "ifes-apt-tc-data-modeling"
     logger = logging.getLogger(DEFAULT_LOGGER_NAME)
     logging.basicConfig(
         filename=f"{DEFAULT_LOGGER_NAME}.log",
