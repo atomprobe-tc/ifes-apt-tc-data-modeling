@@ -100,3 +100,28 @@ def test_combinatorial_walk():
     )
 
     assert len(mion.candidates) == 40
+
+
+@pytest.mark.parametrize(
+    "metastability,expected", [(True, 1), (False, 0)], ids=[">0.4.3", "<=0.4.3"]
+)
+def test_stable_and_metastable_isotopes(metastability: bool, expected: int):
+    mion = MolecularIonBuilder(
+        min_abundance=0.0,
+        min_abundance_product=0.0,
+        min_half_life=np.inf,
+        sacrifice_uniqueness=True,
+        verbose=True,
+        metastability_analysis=metastability,
+    )
+
+    mion.combinatorics(
+        [isotope_to_hash(73, 107)],
+        179.9474648 - 1.0e-3,
+        179.9474648 + 1.0e-3,
+    )
+
+    assert len(mion.candidates) == expected
+
+    # for cand in mion.candidates:
+    #     print(cand.nuclide_hash)

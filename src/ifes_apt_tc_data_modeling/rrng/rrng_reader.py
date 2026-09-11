@@ -25,7 +25,7 @@ import re
 import numpy as np
 
 from ifes_apt_tc_data_modeling.utils.custom_logging import logger
-from ifes_apt_tc_data_modeling.utils.definitions import MQ_EPSILON
+from ifes_apt_tc_data_modeling.utils.definitions import MAX_MULTIPLICITY, MQ_EPSILON
 from ifes_apt_tc_data_modeling.utils.molecular_ions import get_chemical_symbols
 from ifes_apt_tc_data_modeling.utils.nx_ion import (
     NxIon,
@@ -95,7 +95,7 @@ def evaluate_rrng_range_line(i: int, line: str) -> dict:
                 return info
             # if np.uint32(element_multiplicity[1]) <= 0:
             # raise ValueError(f"Line {line} zero or negative multiplicity .")
-            if np.uint32(element_multiplicity[1]) >= 256:
+            if np.uint32(element_multiplicity[1]) >= MAX_MULTIPLICITY:
                 # raise ValueError(f"Line {line} unsupported high multiplicity "
                 #                  f"{np.uint32(element_multiplicity)}.")
                 return info

@@ -31,6 +31,8 @@ MAX_NUMBER_OF_ION_SPECIES = 65536
 MAX_NUMBER_OF_ATOMS_PER_ION = 32
 # practical and required minimum mass-resolution Da or atomic mass unit (amu)
 MQ_EPSILON = np.float64(1.0 / 2000.0)
+# maximum multiplicity
+MAX_MULTIPLICITY = 256
 
 # three types of nuclides are distinguished based on their half life:
 # i) half life infinite modeled as np.inf, stable never practically observed decaying,
