@@ -226,7 +226,7 @@ class ReadAnalysissetFileFormat:
                             ]
                             m_ion = NxIon(nuclide_hash=ivector, charge_state=0)
                             m_ion.add_range(mq[0], mq[1])
-                            m_ion.comment(f"ion_type_info_range[{idx}]")
+                            # m_ion.comment(f"{ion_type_info_range[idx]}")
                             m_ions.append(m_ion)
                         else:
                             logger.warning(
@@ -245,7 +245,7 @@ class ReadAnalysissetFileFormat:
                                 ]
                                 m_ion = NxIon(nuclide_hash=ivector, charge_state=0)
                                 m_ion.add_range(mq[0], mq[1])
-                                m_ion.comment(f"ion_type_info_range[{idx}]")
+                                # m_ion.comment(f"{ion_type_info_range[idx]}")
                                 m_ions.append(m_ion)
                         else:
                             logger.warning(

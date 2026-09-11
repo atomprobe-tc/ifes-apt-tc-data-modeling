@@ -10,7 +10,7 @@ i.e., Local Electrode Atom Probe (LEAP) instruments for scientific data analysis
 public dissemination. The International Field Emission Society (IFES) and Cameca have
 worked together to communicate a documentation for the format which enabled the
 community to develop open-source reading capabilities as implemented also in the
-`ifes_apt_tc_data_modeling` library through its `apt` module.
+`ifes-apt-tc-data-modeling` library through its `apt` module.
 
 While `.apt` is more and more getting accepted, traditional text and binary file formats
 are still commonly used in daily atom probe research practice. Not for all of these
@@ -27,7 +27,7 @@ Consequently, individuals of the community invested into reverse engineering eff
 what these formats store and how this can be parsed using open-source software that is
 developed within the atom probe community and beyond.
 
-The `ifes_apt_tc_data_modeling` library bundles this knowledge highlighting though also
+The `ifes-apt-tc-data-modeling` library bundles this knowledge highlighting though also
 that there are still gaps in our understanding. From an academic point of view
 these should be closed so that whenever possible atom probe data and metadata can
 be always communicated clearly with respect to what do certain numbers mean, i.e.,
@@ -49,7 +49,7 @@ and `.env` formats: These merely store the resulting ranging definitions but do 
 peak finding algorithm or even which mass-to-charge-state-ratio value array they were defined with.
 [A more detailed discussion of these limitations is provided in the literature](https://doi.org/10.1017/S1431927621012241).
 
-The `ifes_apt_tc_data_modeling` library was developed after observing that
+The `ifes-apt-tc-data-modeling` library was developed after observing that
 many researchers in atom probe uses custom written code for reading atom probe
 data via classical file formats. While for several formats this is a rather
 simple programming exercise, it led though to parallel developments and many

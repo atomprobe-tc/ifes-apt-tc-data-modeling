@@ -1,38 +1,44 @@
 repos:
+  # formatting and linting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.19
+    rev: v0.16.7
     hooks:
       - id: ruff-check  # linting
-        files: ^(src/ifes_apt_tc_data_modeling|tests|examples)/.*\.{py|ipynb}$
+        files: ^(src/ifes-apt-tc-data-modeling|tests|examples)/.*\.{py|ipynb}$
       - id: ruff-format
-        files: ^(src/ifes_apt_tc_data_modeling|tests|examples)/.*\.{py|ipynb}$
+        files: ^(src/ifes-apt-tc-data-modeling|tests|examples)/.*\.{py|ipynb}$
 
+  # static type checking 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.2
+    rev: v2.3.1
     hooks:
       - id: mypy  # static type checking
 
+  # modernize syntax for Python 3.12+
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: [--py310-plus]  # modernizes syntax for Python 3.10+
+        args: [--py312-plus]
 
+  # remove output from Jupyter notebooks
   - repo: https://github.com/kynan/nbstripout
     rev: 0.9.1
     hooks:
-      - id: nbstripout  # removes notebook outputs before committing
+      - id: nbstripout
 
+  # spellchecking
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v10.0.1
+    rev: v10.2.0
     hooks:
-      - id: cspell  # spellchecking
+      - id: cspell
         pass_filenames: false
         args:
+          # - --unique
           - --config
           - cspell.json
           - README.md
           - CITATION.cff
           - docs/**/*
-          - src/ifes_apt_tc_data_modeling/**/*.py
+          - src/ifes-apt-tc-data-modeling/**/*.py
           - tests/**/*.py

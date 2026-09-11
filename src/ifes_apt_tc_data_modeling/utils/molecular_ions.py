@@ -46,6 +46,9 @@ def get_chemical_symbols():
     return chemical_symbols[1:]
 
 
+all_nuclides = rd.DEFAULTDATA.nuclides.tolist()
+
+
 class MolecularIonCandidate:
     """Define (molecular) ion build from nuclides."""
 
@@ -79,12 +82,14 @@ class MolecularIonBuilder:
         min_half_life=PRACTICAL_MIN_HALF_LIFE,
         sacrifice_uniqueness=SACRIFICE_ISOTOPIC_UNIQUENESS,
         verbose=VERBOSE,
+        metastability_analysis=True,  # False <=0.4.3 algorithm, True >0.4.3 algorithm
     ):
         self.nuclides = np.asarray([], np.uint16)
         self.element_isotopes = {}
         self.nuclide_mass = {}
         self.nuclide_abundance = {}
-        self.nuclide_stable = {}  # observationally stable
+        self.nuclide_stable = {}  # is considered observationally stable or not?
+        self.nuclide_metastable = {}  # is metastable or not?
         self.nuclide_halflife = {}
         self.candidates = []
         self.parameter = {
@@ -97,29 +102,86 @@ class MolecularIonBuilder:
 
         for symbol, atomic_number in atomic_numbers.items():
             if symbol != "X":
-                # let data from ase take preference, half life from radioactive decay lib
+                # let data from ase take preference
+                # but rule out those for which rd can not confirm sufficient half life
                 element_isotopes = []
                 for mass_number in isotopes[atomic_number]:
                     half_life = np.inf  # assume a stable nuclide
                     observationally_stable = False
-                    trial_nuclide_name = f"{symbol}-{mass_number}"
-                    try:
-                        tmp = rd.Nuclide(trial_nuclide_name)
-                        half_life = tmp.half_life()
+                    metastable = False
+
+                    # breaking change, version of ifes_apt_tc_data_modeling <=0.4.3
+                    # implicitly ruled out metastable isotopes, e.g. Ta-180m
+                    # thus causing edge cases where isotopes like Ta-180 were not
+                    # considered if short-living (holds for Ta-180 < inf)
+                    # there are though cases f"{symbol}-{mass_number}m" with
+                    # relevant half-life and observability although seldomly,
+                    # Ta-180m is such example
+                    if not metastability_analysis:  # <=0.4.3 method
+                        try:
+                            tmp = rd.Nuclide(f"{symbol}-{mass_number}")
+                            half_life = tmp.half_life()
+                            if np.isinf(half_life):
+                                observationally_stable = True
+
+                            elif not np.isnan(half_life):
+                                if half_life < self.parameter["min_half_life"]:
+                                    # ignore practically short living isotopes
+                                    continue
+                            else:
+                                # ignore exotic isotopes
+                                continue
+                        except ValueError:
+                            continue
+                    else:  # >0.4.3 method
+                        half_life_usual = np.inf
+                        half_life_meta = np.inf
+                        choice = []
+                        try:
+                            isotope_normal = rd.Nuclide(f"{symbol}-{mass_number}")
+                            half_life_usual = isotope_normal.half_life()
+                            if (
+                                not np.isnan(half_life_usual)
+                                and half_life_usual >= self.parameter["min_half_life"]
+                            ):
+                                choice.append(isotope_normal)
+                        except ValueError:
+                            pass
+
+                        try:
+                            isotope_meta = rd.Nuclide(f"{symbol}-{mass_number}m")
+                            half_life_meta = isotope_meta.half_life()
+                            if (
+                                not np.isnan(half_life_meta)
+                                and half_life_meta >= self.parameter["min_half_life"]
+                            ):
+                                choice.append(isotope_meta)
+                        except ValueError:
+                            pass
+
+                        if len(choice) == 0:
+                            continue
+                        elif len(choice) == 1:
+                            half_life = choice[0].half_life()
+                            if choice[0].nuclide.endswith("m"):
+                                metastable = True
+                        elif len(choice) == 2:
+                            if choice[0].half_life() >= choice[1].half_life():
+                                half_life = choice[0].half_life()
+                                if choice[0].nuclide.endswith("m"):
+                                    metastable = True
+                            else:
+                                half_life = choice[1].half_life()
+                                if choice[1].nuclide.endswith("m"):
+                                    metastable = True
+                        else:
+                            continue
+
                         if np.isinf(half_life):
                             observationally_stable = True
 
-                        elif not np.isnan(half_life):
-                            if half_life < self.parameter["min_half_life"]:
-                                # ignore practically short living ions
-                                continue
-                        else:
-                            # ignore exotic
-                            continue
-                    except ValueError:
-                        continue
-
-                    # not continued, then get ase abundance data
+                    # not continued, so consider, use ase abundance data, with rd
+                    # half life values sufficient
                     n_protons = atomic_number
                     n_neutrons = mass_number - n_protons
                     mass = isotopes[n_protons][mass_number]["mass"]
@@ -127,9 +189,15 @@ class MolecularIonBuilder:
                     hashvalue = isotope_to_hash(int(n_protons), int(n_neutrons))
                     if hashvalue != 0:
                         self.nuclides = np.append(self.nuclides, hashvalue)
+                        # here we may take the metastable and thus assume that it has the
+                        # same mass than the normal, this is acceptable as the mass
+                        # resolution of atom probe has not been reported enough to
+                        # measure these small differences!
                         self.nuclide_mass[hashvalue] = np.float64(mass)
+
                         self.nuclide_abundance[hashvalue] = np.float64(abundance)
                         self.nuclide_stable[hashvalue] = observationally_stable
+                        self.nuclide_metastable[hashvalue] = metastable
                         self.nuclide_halflife[hashvalue] = half_life
                         element_isotopes = np.append(element_isotopes, hashvalue)
                 self.element_isotopes[atomic_number] = np.sort(

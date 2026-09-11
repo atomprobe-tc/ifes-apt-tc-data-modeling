@@ -239,7 +239,6 @@ def is_convertible_to_isotope_hash(symbol: str):
 
 def element_or_nuclide_to_hash(symbol: str):
     """Converts an element symbol (e.g. K) or nuclide (K-40) to nuclide hash."""
-    # consider moving this to the ifes_apt_tc_data_modeling library
     case = is_convertible_to_isotope_hash(symbol)
     if case == 1:
         return isotope_to_hash(atomic_numbers[symbol], NEUTRON_NUMBER_FOR_ELEMENT)

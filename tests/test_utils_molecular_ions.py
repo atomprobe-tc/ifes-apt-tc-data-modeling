@@ -64,13 +64,64 @@ def test_combinatorial_analysis(
     assert expected == m_ion.name
 
 
-"""
-class TestClass:
-    def test_one(self):
-        x = "this"
-        assert "h" in x
+import numpy as np
 
-    def test_two(self):
-        x = "hello"
-        assert hasattr(x, "check")
-"""
+from ifes_apt_tc_data_modeling.utils.definitions import NEUTRON_NUMBER_FOR_ELEMENT
+from ifes_apt_tc_data_modeling.utils.molecular_ions import MolecularIonBuilder
+from ifes_apt_tc_data_modeling.utils.utils import isotope_to_hash
+
+# find more examples on testing the ion library here
+# https://gitlab.com/paraprobe/paraprobe-toolbox/examples/analyses/molecular_ions
+
+
+def test_combinatorial_walk():
+    # Cerium oxide molecular ion, motivated by the following ranging definition line
+    # from an rrng file of I think it was Karen Kruska's
+    # issue 5 Range33=187.4800 190.2560 Vol:0.12084 Ce:1 O:3 Color:00FF00
+    # many duplicates
+
+    mion = MolecularIonBuilder(
+        min_abundance=0.0,
+        min_abundance_product=0.0,
+        min_half_life=np.inf,
+        sacrifice_uniqueness=True,
+        verbose=True,
+    )
+
+    mion.combinatorics(
+        [
+            isotope_to_hash(58, NEUTRON_NUMBER_FOR_ELEMENT),
+            isotope_to_hash(8, NEUTRON_NUMBER_FOR_ELEMENT),
+            isotope_to_hash(8, NEUTRON_NUMBER_FOR_ELEMENT),
+            isotope_to_hash(8, NEUTRON_NUMBER_FOR_ELEMENT),
+        ],
+        187.4800,
+        190.2560,
+    )
+
+    assert len(mion.candidates) == 40
+
+
+@pytest.mark.parametrize(
+    "metastability,expected", [(True, 1), (False, 0)], ids=[">0.4.3", "<=0.4.3"]
+)
+def test_stable_and_metastable_isotopes(metastability: bool, expected: int):
+    mion = MolecularIonBuilder(
+        min_abundance=0.0,
+        min_abundance_product=0.0,
+        min_half_life=np.inf,
+        sacrifice_uniqueness=True,
+        verbose=True,
+        metastability_analysis=metastability,
+    )
+
+    mion.combinatorics(
+        [isotope_to_hash(73, 107)],
+        179.9474648 - 1.0e-3,
+        179.9474648 + 1.0e-3,
+    )
+
+    assert len(mion.candidates) == expected
+
+    # for cand in mion.candidates:
+    #     print(cand.nuclide_hash)

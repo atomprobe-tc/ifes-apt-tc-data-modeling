@@ -3,17 +3,17 @@ requires = ["setuptools>=78.1.1", "setuptools-scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ifes_apt_tc_data_modeling"
+name = "ifes-apt-tc-data-modeling"
 dynamic = ["version"]
 authors = [
-    { name = "The NOMAD Authors", email = "fairmat@physik.hu-berlin.de" },
+    { name = "Markus Kühbach" },
+    { name = "The NOMAD Authors" },
 ]
-description = "Working with file formats and data models in atom probe tomography and related field-ion microscopy (atom probe microscopy)."
+description = "Working with file formats and data models in atom-probe tomography and related field-ion microscopy (atom probe microscopy)."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -35,7 +35,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "mypy",
+    "mypy>=2.3",
     "ruff>=0.15",
     "types-xmltodict",
     "types-pyyaml",
@@ -44,7 +44,7 @@ dev = [
     "pre-commit",
 ]
 docs = [
-    "mkdocs",
+    "mkdocs<2",
     "mkdocs-material",
     "mkdocs-material-extensions",
     "mkdocs-macros-plugin",
@@ -58,7 +58,7 @@ ipynb = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/atomprobe-tc/ifes_apt_tc_data_modeling"
+"Homepage" = "https://github.com/atomprobe-tc/ifes-apt-tc-data-modeling"
 
 [tool.setuptools.packages.find]
 where = [
@@ -93,6 +93,7 @@ ignore = [
     "PLR0912", # Too many branches
     "PLR0913", # Too many arguments in function definition
     "PLR0915", # Too many statements
+    "PLR0917", # Too many positional arguments
     "PLR2004", # Magic value used instead of constant
     "PLW0603", # Using the global statement
     "PLW2901", # redefined-loop-name
@@ -110,7 +111,6 @@ line-ending = "auto"
 
 [tool.mypy]
 strict = false
-ignore_missing_imports = true
 follow_imports = "silent"
 no_strict_optional = true
 disable_error_code = "import, annotation-unchecked"

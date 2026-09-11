@@ -3,30 +3,30 @@ name: linting
 on: [push]
 
 env:
-  python-version: 3.12
+  PYTHON_VERSION: "3.12"
 
 jobs:
   linting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install uv and set the python version to ${{ env.python-version }}
+        with:
+          submodules: recursive
+
+      - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ env.python-version }}
-      - name: Install dependencies
-        run: |
-          git submodule sync --recursive
-          git submodule update --init --recursive --jobs=4
-      - name: Install package and dev requirements
-        run: |
-          uv pip install .[dev]
-      - name: ruff check
-        run: |
-          ruff check src/ifes_apt_tc_data_modeling tests
-      - name: ruff format
-        run: |
-          ruff format --check src/ifes_apt_tc_data_modeling tests
-      - name: mypy
-        run: |
-          mypy src/ifes_apt_tc_data_modeling tests
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+
+      - name: Install package and dev dependencies
+        run: uv pip install ".[dev]"
+
+      - name: Run ruff check
+        run: ruff check src/ifes_apt_tc_data_modeling tests
+
+      - name: Run ruff format
+        run: ruff format --check src/ifes_apt_tc_data_modeling tests
+
+      - name: Run mypy
+        run: mypy src/ifes_apt_tc_data_modeling tests

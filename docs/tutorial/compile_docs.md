@@ -1,6 +1,6 @@
 # Compile the documentation
 
-Provided `ifes_apt_tc_data_modeling` library was installed with the optional dependency `docs`,
+Provided `ifes-apt-tc-data-modeling` library was installed with the installation extra dependencies `docs`,
 the documentation can be compiled locally using `mkdocs`
 
 ```bash

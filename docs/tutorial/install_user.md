@@ -43,26 +43,26 @@ Install the latest stable version of this package from PyPI with
 === "uv"
 
     ```bash
-    uv pip install ifes_apt_tc_data_modeling[ipynb]
+    uv pip install ifes-apt-tc-data-modeling[ipynb]
     ```
 
 === "pip"
 
 
     ```bash
-    pip install ifes_apt_tc_data_modeling[ipynb]
+    pip install ifes-apt-tc-data-modeling[ipynb]
     ```
 
 === "conda"
 
     ```bash
-    python -m pip install ifes_apt_tc_data_modeling[ipynb]
+    python -m pip install ifes-apt-tc-data-modeling[ipynb]
     ```
 
 This will install the module and [jupyterlab](https://jupyterlab.readthedocs.io/en/latest/) whereby the notebook
 with examples become executable. 
 
-## Start using `ifes_apt_tc_data_modeling`
+## Start using `ifes-apt-tc-data-modeling`
 
 The jupyterlab server is started with
 

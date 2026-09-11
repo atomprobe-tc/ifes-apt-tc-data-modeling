@@ -25,6 +25,16 @@
 # isotopes = download_isotope_data()
 # to avoid having to download the data on-the-fly because ase uses requests
 
+# TODO::this is how to get the data in 2026, nowadays the old http url at NIST does not work
+# endpoint was closed see also https://gitlab.com/ase/ase/-/work_items/1898
+# https://gitlab.com/ase/ase/-/blob/3.29.0/ase/data/isotopes.py?ref_type=tags&blame=1
+# import requests
+# url = 'https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=&ascii=ascii&isotype=all'
+# response = requests.get(url)
+# response.raise_for_status()
+# with response:
+#     raw_data = response.content.decode('utf-8')
+
 isotopes = {
     1: {
         1: {"mass": 1.00782503223, "composition": 0.999885},
