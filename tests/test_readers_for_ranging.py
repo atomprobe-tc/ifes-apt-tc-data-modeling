@@ -37,6 +37,9 @@ READERS = [
         "rrng",
         ".rrng",
         ["examples_without_provenance/ger_duesseldorf_kuehbach/Mo_range.rrng"],
+        # [
+        #     "aus_sydney_theska.0.4.dc3a44a0ba1b1a8c229a21641b35502030209ecff90b89324e84d7bb1e1e9a17.rrng"
+        # ],
     ),
     (
         ReadRngFileFormat,

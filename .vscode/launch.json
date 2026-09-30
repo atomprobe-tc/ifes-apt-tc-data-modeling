@@ -6,21 +6,29 @@
     "configurations": [
         {
             "name": "ifes debug",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             //"program": "../.py3.12.3/bin/dataconverter",
             "args": [
-                "tests/data/analysisset/ZX21-T4.analysisset",
+                //"tests/data/analysisset/ZX21-T4.analysisset",
+                "tests/data/rrng/aus_sydney_theska.0.4.dc3a44a0ba1b1a8c229a21641b35502030209ecff90b89324e84d7bb1e1e9a17.rrng"
                 //"tests/data/cameca_hdf/R69_152985-v01_Top_Level_ROI.hdf5"
             ],
             "justMyCode": false,
         },
         {
-            "name": "Debug Unit Test",
-            "type": "python",
-            "request": "test",
+            "name": "ifes unit test",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["tests", "-v", "--no-header"],
             "justMyCode": false,
-        }
+            "cwd": "${workspaceFolder}",
+            //"env": {
+            //    "PYTHONPATH": "${workspaceFolder}/packages/tool:${workspaceFolder}/packages/other_module"
+            //},
+            //"console": "integratedTerminal"
+        },
     ]
 }
