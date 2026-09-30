@@ -69,7 +69,9 @@ class ReadCsvFileFormat:
         # no magic number, de facto this works only because users know what
         # to expect in advance but how should a machine know this?
         for column_index in [0, 1, 2]:
-            values[:, column_index] = pd.read_csv(self.file_path).iloc[:, column_index]
+            values[:, column_index] = pd.read_csv(
+                self.file_path, sep=r";|,", encoding="utf-8", engine="python"
+            ).iloc[:, column_index]
         return ureg.Quantity(values, ureg.nanometer)
 
     def get_mass_to_charge_state_ratio(self):
@@ -79,5 +81,7 @@ class ReadCsvFileFormat:
         # why reported in Da?
         # why in the third column?
         # why at all a mass-to-charge-state-ratio value array?
-        values[:] = pd.read_csv(self.file_path).iloc[:, 3]
+        values[:] = pd.read_csv(
+            self.file_path, sep=r";|,", encoding="utf-8", engine="python"
+        ).iloc[:, 3]
         return ureg.Quantity(values, ureg.dalton)
