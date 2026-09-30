@@ -21,7 +21,9 @@
 # pylint: disable=too-many-branches,too-many-statements,duplicate-code
 
 import re
+import time
 
+# from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 
 from ifes_apt_tc_data_modeling.utils.custom_logging import logger
@@ -287,8 +289,25 @@ class ReadRrngFileFormat:
             )
         del m_ions
 
+        # def _inner_worker(ion):
+        #     ion.apply_combinatorics()
+        #     return ion
+
+        # trivial_thread_parallelization: bool = True
+        tic = time.perf_counter_ns()
+        # if trivial_thread_parallelization:
+        #     with ThreadPoolExecutor(max_workers=4) as ex:
+        #         self.rrng["molecular_ions"] = list(ex.map(_inner_worker, unique_m_ions))
+        # else:
+        # for idx, m_ion in enumerate(unique_m_ions):
         for m_ion in unique_m_ions:
+            # m_tic = time.perf_counter_ns()
             m_ion.apply_combinatorics()
+            # m_toc = time.perf_counter_ns()
+            # print(f"{idx} >>>> {(m_toc - m_tic) / 1.0e6} ms")
             # m_ion.report()
             self.rrng["molecular_ions"].append(m_ion)
+
+        toc = time.perf_counter_ns()
+        logger.info(f"{(toc - tic) / 1.0e9} seconds spent with apply_combinatorics")
         logger.info(f"{self.file_path} parsed successfully.")

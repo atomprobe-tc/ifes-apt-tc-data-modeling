@@ -38,7 +38,7 @@ READERS = [
         ".rrng",
         ["examples_without_provenance/ger_duesseldorf_kuehbach/Mo_range.rrng"],
         # [
-        #     "examples_with_provenance/aus_sydney_theska/aus_sydney_theska.0.4.dc3a44a0ba1b1a8c229a21641b35502030209ecff90b89324e84d7bb1e1e9a17.rrng"
+        #     # "examples_with_provenance/aus_sydney_theska/aus_sydney_theska.0.4.dc3a44a0ba1b1a8c229a21641b35502030209ecff90b89324e84d7bb1e1e9a17.rrng"
         #     "examples_with_provenance/usa_portland_grimm_elbow/usa_portland_grimm_elbow.0.4.06c32aba7d67591a602f4817a9f7cec061be40fd6d1f94160129c81475eebd61.rrng"
         # ],
     ),
