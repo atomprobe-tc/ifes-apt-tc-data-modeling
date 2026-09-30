@@ -30,7 +30,7 @@ from ifes_apt_tc_data_modeling.utils.pint_custom_unit_registry import ureg
 
 
 class ReadCsvFileFormat:
-    """Read CSV file assuming (n_ions, 4) like in POS."""
+    """Read CSV file assuming (n_ions, 4) like in POS, ignoring trailing columns."""
 
     def __init__(self, file_path: str, verbose: bool = False):
         self.supported = False
@@ -45,12 +45,18 @@ class ReadCsvFileFormat:
         self.number_of_events = None
         self.version = None
 
-        shp = np.shape(pd.read_csv(self.file_path))
+        shp = np.shape(
+            pd.read_csv(self.file_path, sep=r";|,", encoding="utf-8", engine="python")
+        )
         if shp[0] > 0 and shp[1] == 4:
             self.number_of_events = shp[0]
-        else:
+        if shp[1] < 4:
             raise ImportError(
                 "CSV file unsupported version because not formatted like POS."
+            )
+        if shp[1] > 4:
+            logger.warning(
+                f"ifes_csv ignoring trailing columns, assuming POS structure"
             )
 
     def get_reconstructed_positions(self):
