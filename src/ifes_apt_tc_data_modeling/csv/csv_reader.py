@@ -48,7 +48,7 @@ class ReadCsvFileFormat:
         shp = np.shape(
             pd.read_csv(self.file_path, sep=r";|,", encoding="utf-8", engine="python")
         )
-        if shp[0] > 0 and shp[1] == 4:
+        if shp[0] > 0:
             self.number_of_events = shp[0]
         if shp[1] < 4:
             raise ImportError(
