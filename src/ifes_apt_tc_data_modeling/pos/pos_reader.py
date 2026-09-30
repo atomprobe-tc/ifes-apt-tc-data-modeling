@@ -86,12 +86,12 @@ class ReadPosFileFormat:
                 else:
                     all_values = False
                     logger.warning(
-                        f"Unable to get_reconstructed_positions for column_index {column_index}"
+                        f"ifes_pos unable to get_reconstructed_positions for column_index {column_index}"
                     )
             if all_values:
                 return ureg.Quantity(values, ureg.nanometer)
             else:
-                logger.warning("Unable to get_reconstructed_positions")
+                logger.warning("ifes_pos unable to get_reconstructed_positions")
         return None
 
     def get_mass_to_charge_state_ratio(self) -> ureg.Quantity | None:
@@ -111,5 +111,5 @@ class ReadPosFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.dalton)
             else:
-                logger.warning("Unable to get_mass_to_charge_state_ratio")
+                logger.warning("ifes_pos unable to get_mass_to_charge_state_ratio")
         return None

@@ -95,12 +95,12 @@ class ReadEposFileFormat:
                 else:
                     all_values = False
                     logger.warning(
-                        "Unable to get_reconstructed positions for column_index {column_index}"
+                        "ifes_epos unable to get_reconstructed positions for column_index {column_index}"
                     )
             if all_values:
                 return ureg.Quantity(values, ureg.nanometer)
             else:
-                logger.warning("Unable to get_reconstructed_positions")
+                logger.warning("ifes_epos unable to get_reconstructed_positions")
         return None
 
     def get_mass_to_charge_state_ratio(self) -> ureg.Quantity | None:
@@ -122,7 +122,7 @@ class ReadEposFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.dalton)
             else:
-                logger.warning("Unable to get_mass_to_charge_state_ratio")
+                logger.warning("ifes_epos unable to get_mass_to_charge_state_ratio")
         return None
 
     def get_raw_time_of_flight(self) -> ureg.Quantity | None:
@@ -146,7 +146,7 @@ class ReadEposFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.nanosecond)
             else:
-                logger.warning("Unable to get_raw_time_of_flight")
+                logger.warning("ifes_epos unable to get_raw_time_of_flight")
         return None
 
     def get_standing_voltage(self) -> ureg.Quantity | None:
@@ -169,7 +169,7 @@ class ReadEposFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.kilovolt).to(ureg.volt)
             else:
-                logger.warning("Unable to get_standing_voltage")
+                logger.warning("ifes_epos unable to get_standing_voltage")
         return None
 
     def get_pulse_voltage(self) -> ureg.Quantity | None:
@@ -192,7 +192,7 @@ class ReadEposFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.kilovolt).to(ureg.volt)
             else:
-                logger.warning("Unable to get_pulse_voltage")
+                logger.warning("ifes_epos unable to get_pulse_voltage")
         return None
 
     def get_hit_positions(self) -> ureg.Quantity | None:
@@ -214,11 +214,11 @@ class ReadEposFileFormat:
                     np.copyto(values[:, column_index], data, casting="unsafe")
                 else:
                     all_values = False
-                    logger.warning("Unable to get_hit_positions dim {dim}")
+                    logger.warning("ifes_epos unable to get_hit_positions dim {dim}")
             if all_values:
                 return ureg.Quantity(values, ureg.millimeter)
             else:
-                logger.warning("Unable to get_hit_positions")
+                logger.warning("ifes_epos unable to get_hit_positions")
         return None
 
     def get_number_of_pulses(self) -> ureg.Quantity | None:
@@ -242,7 +242,7 @@ class ReadEposFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values)
             else:
-                logger.warning("Unable to get_number_of_pulses")
+                logger.warning("ifes_epos unable to get_number_of_pulses")
         return None
 
     def get_ions_per_pulse(self) -> ureg.Quantity | None:
@@ -264,5 +264,5 @@ class ReadEposFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values)
             else:
-                logger.warning("Unable to get_ions_per_pulse")
+                logger.warning("ifes_epos unable to get_ions_per_pulse")
         return None
