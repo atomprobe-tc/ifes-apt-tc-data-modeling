@@ -1,10 +1,10 @@
 # Installation as a user
 
-It is recommended to use python 3.13 with a dedicated virtual environment for this package. Learn how to manage [python versions](https://github.com/pyenv/pyenv) and [virtual environments](https://realpython.com/python-virtual-environments-a-primer/).
+It is recommended to use python 3.12 with a dedicated virtual environment for this package. Learn how to manage [python versions](https://github.com/pyenv/pyenv) and [virtual environments](https://realpython.com/python-virtual-environments-a-primer/).
 
-There are many alternatives to managing virtual environments and package dependencies (requirements). We recommend using [`uv`](https://github.com/astral-sh/uv), an extremely fast manager Python package and project manager. In this tutorial, you will find paralleled descriptions, using either `uv` or a more classical approach using `venv` and `pip`. Using a [conda environment](https://www.anaconda.com/docs/tools/working-with-conda/environments) is yet another alternative.
+There are many alternatives to managing virtual environments and package dependencies (requirements). We recommend using [`uv`](https://github.com/astral-sh/uv), an extremely fast manager Python package and project manager. In this tutorial, you will find paralleled descriptions for `uv`, Python virtual environments (`venv` and `pip`), and [`conda`](https://www.anaconda.com/docs/tools/working-with-conda/environments).
 
-The library can be used on Windows, Mac, or Unix, provided a Python version is installed.
+The library can be used on Unix, Windows, provided a Python version is installed. Mac should also be supported but received any feedback if that is true for Mac.
 
 ## Setup
 
@@ -14,7 +14,7 @@ Start by creating a virtual environment, e.g., in a directory on your local comp
     `uv` is capable of creating a virtual environment and install the required Python version at the same time.
 
     ```bash
-    uv venv --python 3.13
+    uv venv --python 3.12
     ```
 
 === "venv"
@@ -29,7 +29,7 @@ Start by creating a virtual environment, e.g., in a directory on your local comp
     Note that you will need to install the Python version manually beforehand.
     
     ```bash
-    conda create -n venv python=3.13
+    conda create -n venv python=3.12
     conda activate venv
     conda install pip
     ```
@@ -66,9 +66,23 @@ with examples become executable.
 
 The jupyterlab server is started with
 
-```bash
-jupyter-lab
-```
+=== "uv"
+
+    ```bash
+    uv run jupyter-lab
+    ```
+    
+=== "venv"
+
+    ```bash
+    jupyter-lab
+    ```
+    
+=== "conda"
+
+    ```bash
+    conda run jupyter-lab
+    ```
 
 The notebook to run is the following `examples/ExamplesForUsersOrDevelopers.ipynb`
 That's it! You can now use the library that you have installed!
