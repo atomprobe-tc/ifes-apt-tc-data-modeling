@@ -35,8 +35,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "mypy>=2.3",
-    "ruff>=0.15",
+    "mypy",
+    "ruff",
     "types-xmltodict",
     "types-pyyaml",
     "pandas-stubs",
@@ -44,7 +44,7 @@ dev = [
     "pre-commit",
 ]
 docs = [
-    "mkdocs<2",
+    "mkdocs",
     "mkdocs-material",
     "mkdocs-material-extensions",
     "mkdocs-macros-plugin",
