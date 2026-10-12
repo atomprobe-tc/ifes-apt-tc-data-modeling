@@ -86,7 +86,7 @@ class ReadStuttgartApytRawFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.volt)
             else:
-                logger.warning("Unable to get_base_voltage")
+                logger.warning("ifes_stuttgart unable to get_base_voltage")
         return None
 
     def get_pulse_voltage(self) -> ureg.Quantity | None:
@@ -106,7 +106,7 @@ class ReadStuttgartApytRawFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.volt)
             else:
-                logger.warning("Unable to get_pulse_voltage")
+                logger.warning("ifes_stuttgart unable to get_pulse_voltage")
         return None
 
     def get_reflectron_voltage(self) -> ureg.Quantity | None:
@@ -126,7 +126,7 @@ class ReadStuttgartApytRawFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.volt)
             else:
-                logger.warning("Unable to get_reflectron_voltage")
+                logger.warning("ifes_stuttgart unable to get_reflectron_voltage")
         return None
 
     def get_raw_detector_position(self) -> ureg.Quantity | None:
@@ -149,12 +149,12 @@ class ReadStuttgartApytRawFileFormat:
                 else:
                     all_values = False
                     logger.warning(
-                        f"Unable to get_raw_detector_position dim {column_index}"
+                        f"ifes_stuttgart unable to get_raw_detector_position dim {column_index}"
                     )
             if all_values:
                 return ureg.Quantity(values, ureg.millimeter)
             else:
-                logger.warning("Unable to get_raw_detector_position")
+                logger.warning("ifes_stuttgart unable to get_raw_detector_position")
         return None
 
     def get_raw_time_of_flight(self) -> ureg.Quantity | None:
@@ -174,7 +174,7 @@ class ReadStuttgartApytRawFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values, ureg.nanosecond)
             else:
-                logger.warning("Unable to get_raw_time_of_flight")
+                logger.warning("ifes_stuttgart unable to get_raw_time_of_flight")
         return None
 
     def get_epoch_evaporation_event(self) -> ureg.Quantity | None:
@@ -194,7 +194,7 @@ class ReadStuttgartApytRawFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values)
             else:
-                logger.warning("Unable to get_epoch_evaporation_event")
+                logger.warning("ifes_stuttgart unable to get_epoch_evaporation_event")
         return None
 
     def get_pulse_number_evaporation_event(self) -> ureg.Quantity | None:
@@ -214,5 +214,7 @@ class ReadStuttgartApytRawFileFormat:
                 np.copyto(values[:], data, casting="unsafe")
                 return ureg.Quantity(values)
             else:
-                logger.warning("Unable to get_pulse_number_evaporation_event")
+                logger.warning(
+                    "ifes_stuttgart unable to get_pulse_number_evaporation_event"
+                )
         return None

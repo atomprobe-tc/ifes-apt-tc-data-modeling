@@ -85,6 +85,7 @@ rraw
 rrng
 runrootl
 sextett
+theska
 tofb
 tofc
 tofile

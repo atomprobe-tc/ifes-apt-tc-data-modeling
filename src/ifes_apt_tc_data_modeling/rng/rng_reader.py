@@ -21,6 +21,7 @@
 # pylint: disable=duplicate-code
 
 import re
+import time
 
 import numpy as np
 
@@ -202,8 +203,12 @@ class ReadRngFileFormat:
             )
         del m_ions
 
+        tic = time.perf_counter_ns()
         for m_ion in unique_m_ions:
             m_ion.apply_combinatorics()
             # m_ion.report()
             self.rng["molecular_ions"].append(m_ion)
+
+        toc = time.perf_counter_ns()
+        logger.info(f"{(toc - tic) / 1.0e9} seconds spent with apply_combinatorics")
         logger.info(f"{self.file_path} parsed successfully.")

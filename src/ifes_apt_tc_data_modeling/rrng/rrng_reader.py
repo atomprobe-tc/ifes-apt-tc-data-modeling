@@ -21,7 +21,9 @@
 # pylint: disable=too-many-branches,too-many-statements,duplicate-code
 
 import re
+import time
 
+# from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 
 from ifes_apt_tc_data_modeling.utils.custom_logging import logger
@@ -143,63 +145,71 @@ class ReadRrngFileFormat:
         # see DOI: 10.1007/978-1-4899-7430-3 for further details to this
         # AMETEK/Cameca"s *.rrng file format
 
-        # first, parse [Ions] section, which holds a list of element names
-        # there are documented cases where experimentalists add custom strings
-        # to specify ranges they consider special
-        # these are loaded as user types
-        # with nuclide_hash np.iinfo(np.uint16).max
+        # first, parse [Ions] section if present
+        # the section holds a list of two possible types of names (of elements, or of custom names)
+        # custom names for documented cases where experimentalists consider certain peaks special
+        # we currently ignore these ion_names though and use only the ranging definition
         where = [idx for idx, element in enumerate(txt_stripped) if element == "[Ions]"]
-        if not isinstance(where, list):
-            raise ValueError("Section [Ions] not found.")
-        if len(where) != 1:
-            raise ValueError("Section [Ions] not found or ambiguous.")
-        current_line_id = where[0] + 1
-
-        tmp = re.split(r"[\s=]+", txt_stripped[current_line_id])
-        if len(tmp) != 2:
-            raise ValueError(
-                f"Line {txt_stripped[current_line_id]} [Ions]/Number line corrupted."
+        if len(where) == 0:
+            logger.warning(
+                f"ifes_rrng [Ions] section not found, working with [Ranges] only"
             )
-        if tmp[0] != "Number":
-            raise ValueError(
-                f"Line {txt_stripped[current_line_id]} [Ions]/Number incorrectly formatted."
+        elif len(where) > 1:
+            logger.warning(
+                f"ifes_rrng [Ions] section found multiple times, working with [Ranges] only."
             )
-        if not tmp[1].isnumeric():
-            raise ValueError(
-                f"Line {txt_stripped[current_line_id]} [Ions]/Number not a number."
-            )
-        number_of_ion_names = int(tmp[1])
-        if number_of_ion_names <= 0:
-            raise ValueError(
-                f"Line {txt_stripped[current_line_id]} no ion names defined."
-            )
-        current_line_id += 1
-        for i in np.arange(0, number_of_ion_names):
-            tmp = re.split(r"[\s=]+", txt_stripped[current_line_id + i])
+        else:
+            current_line_id = where[0] + 1
+            tmp = re.split(r"[\s=]+", txt_stripped[current_line_id])
             if len(tmp) != 2:
                 raise ValueError(
-                    f"Line {txt_stripped[current_line_id + i]} [Ions]/Ion line corrupted."
+                    f"Line {txt_stripped[current_line_id]} [Ions]/Number line corrupted."
                 )
-            if tmp[0] != f"Ion{i + 1}":
+            if tmp[0] != "Number":
                 raise ValueError(
-                    f"Line {txt_stripped[current_line_id + i]} [Ions]/Ion incorrectly formatted."
+                    f"Line {txt_stripped[current_line_id]} [Ions]/Number incorrectly formatted."
                 )
-            if not isinstance(tmp[1], str):
+            if not tmp[1].isnumeric():
                 raise ValueError(
-                    f"Line {txt_stripped[current_line_id + i]} [Ions]/Name not a string."
+                    f"Line {txt_stripped[current_line_id]} [Ions]/Number not a number."
                 )
-            self.rrng["ion_names"].append(tmp[1])
+            number_of_ion_names = int(tmp[1])
+            if number_of_ion_names <= 0:
+                raise ValueError(
+                    f"Line {txt_stripped[current_line_id]} no ion names defined."
+                )
+            current_line_id += 1
+            for i in np.arange(0, number_of_ion_names):
+                tmp = re.split(r"[\s=]+", txt_stripped[current_line_id + i])
+                if len(tmp) != 2:
+                    raise ValueError(
+                        f"Line {txt_stripped[current_line_id + i]} [Ions]/Ion line corrupted."
+                    )
+                if tmp[0] != f"Ion{i + 1}":
+                    raise ValueError(
+                        f"Line {txt_stripped[current_line_id + i]} [Ions]/Ion incorrectly formatted."
+                    )
+                if not isinstance(tmp[1], str):
+                    raise ValueError(
+                        f"Line {txt_stripped[current_line_id + i]} [Ions]/Name not a string."
+                    )
+                self.rrng["ion_names"].append(tmp[1])
 
         # second, parse [Ranges] section
         where = [
             idx for idx, element in enumerate(txt_stripped) if element == "[Ranges]"
         ]
-        if not isinstance(where, list):
-            raise ValueError("Section [Ranges] not found.")
-        if len(where) != 1:
-            raise ValueError("Section [Ranges] not found or ambiguous.")
-        current_line_id = where[0] + 1
+        if len(where) == 0:
+            raise ValueError(
+                "ifes_rrng [Ranges] section not found, ignore all definitions"
+            )
+        elif len(where) > 1:
+            raise ValueError(
+                "ifes_rrng [Ranges] found multiple times, ignore all definitions."
+            )
 
+        # [Ranges] exactly one time
+        current_line_id = where[0] + 1
         tmp = re.split(r"[\s=]+", txt_stripped[current_line_id])
         if len(tmp) != 2:
             raise ValueError(
@@ -213,31 +223,59 @@ class ReadRrngFileFormat:
             raise ValueError(
                 f"Line {txt_stripped[current_line_id]} [Ranges]/Number not a number."
             )
-        number_of_ranges = int(tmp[1])
-        if number_of_ranges <= 0:
-            raise ValueError(
-                f"Line {txt_stripped[current_line_id]}  No ranges defined."
-            )
-        current_line_id += 1
 
         m_ions = []
-        for jdx in np.arange(0, number_of_ranges):
-            if self.verbose:
-                logger.debug(f"{txt_stripped[current_line_id + jdx]}")
-            dct = evaluate_rrng_range_line(jdx + 1, txt_stripped[current_line_id + jdx])
-            if dct is None:
-                logger.warning(
-                    f"RRNG line {txt_stripped[current_line_id + jdx]} is corrupted."
-                )
-                continue
 
-            m_ion = NxIon(
-                nuclide_hash=create_nuclide_hash(dct["atoms"]), charge_state=0
+        number_of_ranges = int(tmp[1])
+        if number_of_ranges < 0:
+            raise ValueError(
+                f"Line {txt_stripped[current_line_id]}  number_of_ranges must not be negative."
             )
-            m_ion.add_range(dct["range"][0], dct["range"][1])
-            m_ion.comment = dct["name"]
-            m_ions.append(m_ion)
-            # this set may contain duplicates or overlapping ranges if ranging definitions are ambiguous like here https://doi.org/10.5281/zenodo.7788883
+        elif number_of_ranges == 0:
+            logger.warning(
+                f"Line {txt_stripped[current_line_id]}  number_of_ranges=0, try to read plain Ranges using regex expression"
+            )
+            regex = re.compile(
+                r"^Range([1-9]\d*)=([-+]?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?) ([-+]?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?).*"
+            )
+            where = [line for line in txt_stripped if regex.match(line)]
+            for jdx, range_line in enumerate(where):
+                if self.verbose:
+                    logger.debug(f"{txt_stripped[current_line_id + jdx]}")
+                dct = evaluate_rrng_range_line(jdx + 1, range_line)
+                if dct is None:
+                    logger.warning(f"RRNG line {range_line} is corrupted.")
+                    continue
+
+                m_ion = NxIon(
+                    nuclide_hash=create_nuclide_hash(dct["atoms"]), charge_state=0
+                )
+                m_ion.add_range(dct["range"][0], dct["range"][1])
+                m_ion.comment = dct["name"]
+                m_ions.append(m_ion)
+                # this set may contain duplicates or overlapping ranges if ranging definitions are ambiguous like here https://doi.org/10.5281/zenodo.7788883
+        else:
+            current_line_id += 1
+
+            for jdx in np.arange(0, number_of_ranges):
+                if self.verbose:
+                    logger.debug(f"{txt_stripped[current_line_id + jdx]}")
+                dct = evaluate_rrng_range_line(
+                    jdx + 1, txt_stripped[current_line_id + jdx]
+                )
+                if dct is None:
+                    logger.warning(
+                        f"RRNG line {txt_stripped[current_line_id + jdx]} is corrupted."
+                    )
+                    continue
+
+                m_ion = NxIon(
+                    nuclide_hash=create_nuclide_hash(dct["atoms"]), charge_state=0
+                )
+                m_ion.add_range(dct["range"][0], dct["range"][1])
+                m_ion.comment = dct["name"]
+                m_ions.append(m_ion)
+                # this set may contain duplicates or overlapping ranges if ranging definitions are ambiguous like here https://doi.org/10.5281/zenodo.7788883
 
         if self.unique:
             unique_m_ions = try_to_reduce_to_unique_definitions(m_ions)
@@ -251,8 +289,25 @@ class ReadRrngFileFormat:
             )
         del m_ions
 
+        # def _inner_worker(ion):
+        #     ion.apply_combinatorics()
+        #     return ion
+
+        # trivial_thread_parallelization: bool = True
+        tic = time.perf_counter_ns()
+        # if trivial_thread_parallelization:
+        #     with ThreadPoolExecutor(max_workers=4) as ex:
+        #         self.rrng["molecular_ions"] = list(ex.map(_inner_worker, unique_m_ions))
+        # else:
+        # for idx, m_ion in enumerate(unique_m_ions):
         for m_ion in unique_m_ions:
+            # m_tic = time.perf_counter_ns()
             m_ion.apply_combinatorics()
+            # m_toc = time.perf_counter_ns()
+            # print(f"{idx} >>>> {(m_toc - m_tic) / 1.0e6} ms")
             # m_ion.report()
             self.rrng["molecular_ions"].append(m_ion)
+
+        toc = time.perf_counter_ns()
+        logger.info(f"{(toc - tic) / 1.0e9} seconds spent with apply_combinatorics")
         logger.info(f"{self.file_path} parsed successfully.")

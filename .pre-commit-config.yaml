@@ -1,7 +1,7 @@
 repos:
   # formatting and linting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.7
+    rev: v0.17.0
     hooks:
       - id: ruff-check  # linting
         files: ^(src/ifes-apt-tc-data-modeling|tests|examples)/.*\.{py|ipynb}$
@@ -10,13 +10,13 @@ repos:
 
   # static type checking 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.3.1
+    rev: v2.4.0
     hooks:
       - id: mypy  # static type checking
 
   # modernize syntax for Python 3.12+
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: v3.22.0
     hooks:
       - id: pyupgrade
         args: [--py312-plus]
@@ -29,7 +29,7 @@ repos:
 
   # spellchecking
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v10.2.0
+    rev: v10.3.0
     hooks:
       - id: cspell
         pass_filenames: false

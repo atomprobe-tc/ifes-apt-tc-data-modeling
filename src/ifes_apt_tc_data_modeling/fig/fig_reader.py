@@ -21,6 +21,7 @@
 # pylint: disable=too-many-locals
 
 import re
+import time
 
 import numpy as np
 from ase.data import atomic_numbers
@@ -135,8 +136,12 @@ class ReadFigTxtFileFormat:
             )
         del m_ions
 
+        tic = time.perf_counter_ns()
         for m_ion in unique_m_ions:
             m_ion.apply_combinatorics()
             # m_ion.report()
             self.fig["molecular_ions"].append(m_ion)
+
+        toc = time.perf_counter_ns()
+        logger.info(f"{(toc - tic) / 1.0e9} seconds spent with apply_combinatorics")
         logger.info(f"{self.file_path} parsed successfully.")

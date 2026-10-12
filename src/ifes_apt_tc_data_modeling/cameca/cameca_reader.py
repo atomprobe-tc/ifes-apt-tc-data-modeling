@@ -133,7 +133,7 @@ class ReadCamecaHfiveFileFormat:
                 values[:, :] = np.asarray(h5r["xyz"][...], np.float32)
                 return ureg.Quantity(values, ureg.nanometer)
             else:
-                logger.warning("Unable to get_reconstructed positions")
+                logger.warning("ifes_cameca_hdf unable to get_reconstructed positions")
 
     def get_mass_to_charge_state_ratio(self):
         """Read (calibrated?) mass-to-charge-state-ratio."""
@@ -143,4 +143,6 @@ class ReadCamecaHfiveFileFormat:
                 values[:] = np.asarray(h5r["mass"][...], np.float32)
                 return ureg.Quantity(values, ureg.dalton)
             else:
-                logger.warning("Unable to get_mass_to_charge_state_ratio")
+                logger.warning(
+                    "ifes_cameca_hdf unable to get_mass_to_charge_state_ratio"
+                )
